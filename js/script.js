@@ -3,12 +3,18 @@ const personas = [
   {
     nombre: "Juan Perez",
     edad: 18,
+    email : "123@gmail.com"
   },
   {
     nombre: "Maria Loza",
     edad: 21,
+    email : "456@gmail.com"
   },
 ];
+function esEmailValido(email){
+    const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    return regex.test(email);
+}
 
 function agregarPersona() {
   //Obtenemos el elemento para mostrar un error del nombre
@@ -21,11 +27,18 @@ function agregarPersona() {
   //borramos el contenido del elemento
   msgErrorEdad.innerHTML = "";
 
+  //Obtenemos el elemento para mostrar un error del email
+  const msgErrorEmail = document.querySelector("#msg-error-email");
+  msgErrorEmail.innerHTML = "";
+
   //Obtenemos el input donde se ingresa el nombre
   const inputNombre = document.querySelector("#input-nombre");
 
   //Obtenemos el input donde se ingresa la edad
   const inputEdad = document.querySelector("#input-edad");
+
+  //Obtenemos el input donde se ingresa el email
+  const inputEmail = document.querySelector("#input-email");
 
   //Creamos una variable que indica si el formulario tiene error
   //Inicialmente suponemos que el fomulario NO tiene error
@@ -57,6 +70,19 @@ function agregarPersona() {
     hayError = true;
   }
 
+  let email = inputEmail.value.trim();
+  if (email === "") {
+    msgErrorEmail.innerHTML = "Debe ingresar un email";
+    
+    hayError = true;
+  } else if (!esEmailValido(email)) {
+    msgErrorEmail.innerHTML = "El email ingresado no es válido";
+    
+    hayError = true;
+  } 
+
+  
+
   //Si el formulario tiene algun error (valores invalidos)
   if (hayError) {
     //Es lo mismo que escribir hayError === true
@@ -70,6 +96,7 @@ function agregarPersona() {
   const nuevaPersona = {
     nombre: nombre,
     edad: edad,
+    email: email,
   };
 
   //Ingresamos el nuevo objeto persona dentro del arreglo
@@ -77,6 +104,7 @@ function agregarPersona() {
   //Limpiamos los inputs
   inputNombre.value = "";
   inputEdad.value = "";
+  inputEmail.value = "";
 
   //Actualizamos la tabla de personas para reflejar los cambios en el arreglo
   actualizarLista();
@@ -134,9 +162,12 @@ function actualizarLista() {
       persona.nombre +
       "</td><td>" +
       persona.edad +
-      "</td></tr>";
+      "</td><td>" +
+      persona.email +
+      "</td><tr>";
   }
 
   //Al final se colocará el html que se generó dentro del contenido del <tbody>
   listaNombresHtml.innerHTML = html;
 }
+
